@@ -40,8 +40,15 @@ const slice = createSlice({
       });
       state.totalPost = count;
     },
+    sendPostReactionSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { postId, reactions } = action.payload;
+      state.postsById[postId].reactions = reactions;
+    },
   },
 });
+
 export const createPost =
   ({ content, image }) =>
   async (dispatch) => {
@@ -64,6 +71,27 @@ export const getPosts =
       dispatch(slice.actions.getPostSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
+    }
+  };
+
+export const sendPostReaction =
+  ({ postId, emoji }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await apiService.post("/reactions", {
+        targetType: "Post",
+        targetId: postId,
+        emoji: emoji,
+      });
+      dispatch(
+        slice.actions.sendPostReactionSuccess({
+          postId,
+          reactions: response.data.data,
+        })
+      );
+    } catch (error) {
+      dispatch(slice.actions.hasError());
     }
   };
 
