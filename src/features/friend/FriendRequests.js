@@ -1,16 +1,9 @@
-import {
-  Card,
-  Grid,
-  Pagination,
-  Stack,
-  TablePagination,
-  Typography,
-} from "@mui/material";
+import { Card, Grid, Pagination, Stack, Typography } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchInput from "../../components/SearchInput";
-import { getFriend } from "./friendSlice";
+import { getFriendRequest } from "./friendSlice";
 import UserCard from "./UserCard";
 
 function FriendRequests() {
@@ -24,7 +17,7 @@ function FriendRequests() {
   const users = currentPageUsers.map((userId) => usersById[userId]);
 
   useEffect(() => {
-    dispatch(getFriend({ page, filterName }));
+    dispatch(getFriendRequest({ page, filterName }));
   }, [page, dispatch, filterName]);
 
   const handleSubmit = (searchQuery) => {
@@ -34,7 +27,7 @@ function FriendRequests() {
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        Friend
+        Friend Requests
       </Typography>
       <Card sx={{ p: 3 }}>
         <Stack spacing={2}>
