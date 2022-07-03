@@ -59,7 +59,7 @@ function PostCard({ post }) {
               "& img": { objectFit: "cover", width: 1, height: 1 },
             }}
           >
-            <img src={post.image} alt={post} />
+            <img src={post.image} alt={post.content} />
           </Box>
         )}
 

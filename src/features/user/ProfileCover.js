@@ -8,7 +8,6 @@ import { styled, alpha } from "@mui/material/styles";
 const RootStyle = styled("div")(({ theme }) => ({
   "&:before": {
     backdropFilter: `blur(1px)`,
-    backgroundColor: alpha(theme.palette.primary.dark, 0.7),
     top: 0,
     zIndex: 9,
     content: "''",
@@ -24,6 +23,13 @@ const InfoStyle = styled("div")(({ theme }) => ({
   zIndex: 99,
   position: "absolute",
   marginTop: theme.spacing(5),
+  [theme.breakpoints.up("md")]: {
+    right: "auto",
+    display: "flex",
+    alignItems: "center",
+    left: theme.spacing(5),
+    bottom: theme.spacing(3),
+  },
 }));
 
 function ProfileCover({ profile }) {
@@ -54,54 +60,45 @@ function ProfileCover({ profile }) {
   };
 
   return (
-    <div>
-      <RootStyle>
-        <InfoStyle>
-          <Box
-            sx={{
-              ml: { md: 3 },
-              mt: { xs: 1, md: 0 },
-              color: "common.white",
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            <Avatar
-              src={avatarUrl}
-              alt={name}
-              sx={{
-                mx: "auto",
-                borderWidth: 2,
-                borderStyle: "solid",
-                borderColor: "common.white",
-                width: { xs: 80, md: 128 },
-                height: { xs: 80, md: 128 },
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              ml: { md: 3 },
-              mt: { xs: 1, md: 0 },
-              color: "common.white",
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            <Typography variant="h5">{name}</Typography>
-            <Typography sx={{ opacity: 0.72 }}>{jobTitle}</Typography>
-            {friendStatus}
-          </Box>
-          <Box overflow="hidden">
-            <img
-              src={coverUrl}
-              alt="profile cover"
-              width="100%"
-              height="100%"
-              onError={handleError}
-            />
-          </Box>
-        </InfoStyle>
-      </RootStyle>
-    </div>
+    <RootStyle>
+      <InfoStyle>
+        <Avatar
+          src={avatarUrl}
+          alt={name}
+          sx={{
+            mx: "auto",
+            borderWidth: 2,
+            borderStyle: "solid",
+            borderColor: "common.white",
+            width: { xs: 80, md: 128 },
+            height: { xs: 80, md: 128 },
+          }}
+        />
+
+        <Box
+          sx={{
+            ml: { md: 3 },
+            mt: { xs: 1, md: 0 },
+            mb: 2,
+            color: "common.white",
+            textAlign: { xs: "center", md: "left" },
+          }}
+        >
+          <Typography variant="h5">{name}</Typography>
+          <Typography sx={{ opacity: 0.72 }}>{jobTitle}</Typography>
+          {friendStatus}
+        </Box>
+      </InfoStyle>
+      <Box sx={{ overflow: "hidden" }}>
+        <img
+          src={coverUrl}
+          alt="profile cover"
+          width="100%"
+          height="100%"
+          onError={handleError}
+        />
+      </Box>
+    </RootStyle>
   );
 }
 

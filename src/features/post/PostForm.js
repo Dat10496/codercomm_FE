@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Card, alpha, Box, Stack } from "@mui/material";
-import { FormProvider, FTextField } from "../../components/form";
-import { borderColor } from "@mui/system";
+import { FormProvider, FTextField, FUploadImage } from "../../components/form";
 import { LoadingButton } from "@mui/lab";
 import { createPost } from "./postSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +35,23 @@ function PostForm() {
   const onSubmit = (data) => {
     dispatch(createPost(data)).then(() => reset());
   };
+
+  const handleDrop = useCallback(
+    (acceptedFile) => {
+      const file = acceptedFile[0];
+
+      if (file) {
+        setValue(
+          "image",
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        );
+      }
+    },
+    [setValue]
+  );
+
   return (
     <Card sx={{ p: 3 }}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -53,7 +69,12 @@ function PostForm() {
               },
             }}
           />
-          <FTextField name="image" placeholder="Image" />
+          <FUploadImage
+            name="image"
+            accept="image/*"
+            maxSize={3145728}
+            onDrop={handleDrop}
+          />
           <Box
             sx={{
               display: "flex",
