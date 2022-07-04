@@ -4,7 +4,7 @@ import { fNumber } from "../../utils/numberFormat";
 
 function ProfileScorecard({ profile }) {
   const { postCount, friendCount } = profile;
-  // console.log(fNumber(20));
+
   return (
     <Card sx={{ py: 3 }}>
       <Stack
@@ -12,13 +12,13 @@ function ProfileScorecard({ profile }) {
         divider={<Divider orientation="vertical" flexItem />}
       >
         <Stack width={1} textAlign="center">
-          <Typography variant="h4">{friendCount}</Typography>
+          <Typography variant="h4">{fNumber(friendCount)}</Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             Friend
           </Typography>
         </Stack>
         <Stack width={1} textAlign="  center">
-          <Typography variant="h4">{postCount}</Typography>
+          <Typography variant="h4">{fNumber(postCount)}</Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             Post
           </Typography>

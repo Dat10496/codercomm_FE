@@ -48,14 +48,14 @@ function AccountGeneral() {
 
   const onSubmit = (data) => {
     dispatch(updateUserProfile({ userId, ...data }));
-    console.log(data);
   };
   const handleDrop = useCallback(
     (acceptedFile) => {
       const file = acceptedFile[0];
+
       if (file) {
         setValue(
-          "image",
+          "avatarUrl",
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
@@ -77,7 +77,7 @@ function AccountGeneral() {
               helperText={
                 <Typography>
                   Allowed *.jpeg *.jpg *.png *.gif
-                  {/* <br /> max size of {fData(314777)} */}
+                  <br /> max size of {fData(314777)}
                 </Typography>
               }
             />

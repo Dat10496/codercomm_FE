@@ -14,23 +14,22 @@ function FUploadAvatar({ name, ...other }) {
 
         return (
           <div>
-            <UploadAvatar error={checkError} {...other} file={field.value}>
-              {checkError && (
-                <FormHelperText
-                  error
-                  sx={{
-                    px: 2,
-                    textAlign: "center",
-                  }}
-                >
-                  {error.message}
-                </FormHelperText>
-              )}
-            </UploadAvatar>
+            <UploadAvatar error={checkError} {...other} file={field.value} />
+            {checkError && (
+              <FormHelperText
+                error
+                sx={{
+                  px: 2,
+                  textAlign: "center",
+                }}
+              >
+                {error.message}
+              </FormHelperText>
+            )}
           </div>
         );
       }}
-    ></Controller>
+    />
   );
 }
 

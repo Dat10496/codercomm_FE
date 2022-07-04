@@ -10,7 +10,10 @@ function ThemeProvider({ children }) {
   const themeOption = {
     palette: {
       primary: {
-        main: "#d35400",
+        main: "#3875b5",
+      },
+      secondary: {
+        main: "#2a2c2e",
       },
     },
     shape: { borderRadius: 8 },

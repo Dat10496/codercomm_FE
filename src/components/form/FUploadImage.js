@@ -13,22 +13,24 @@ function FUploadImage({ name, ...other }) {
         const checkError = !!error && field.value;
 
         return (
-          <UploadSingleFile
-            accept="image/*"
-            file={field.value}
-            error={checkError}
-            helperText={
-              checkError && (
-                <FormHelperText error sx={{ px: 2 }}>
-                  {error.message}
-                </FormHelperText>
-              )
-            }
-            {...other}
-          />
+          <div>
+            <UploadSingleFile
+              accept="image/*"
+              file={field.value}
+              error={checkError}
+              helperText={
+                checkError && (
+                  <FormHelperText error sx={{ px: 2 }}>
+                    {error.message}
+                  </FormHelperText>
+                )
+              }
+              {...other}
+            />
+          </div>
         );
       }}
-    ></Controller>
+    />
   );
 }
 

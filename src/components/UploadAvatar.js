@@ -2,8 +2,9 @@ import isString from "lodash/isString";
 import { useDropzone } from "react-dropzone";
 import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
 import { alpha, styled } from "@mui/material/styles";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import RejectionFile from "./RejectionFile";
+import { common } from "@mui/material/colors";
 
 const RootStyle = styled("div")(({ theme }) => ({
   width: 144,
@@ -25,12 +26,12 @@ const DropZoneStyle = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   "& > *": { width: "100%", height: "100%" },
-  //   "&:hover": {
-  //     cursor: "pointer",
-  //     "&.placeholder": {
-  //       zIndex: 1,
-  //     },
-  //   },
+  "&:hover": {
+    cursor: "pointer",
+    "& .placeholder": {
+      zIndex: 9,
+    },
+  },
 }));
 
 const PlaceholderStyle = styled("div")(({ theme }) => ({
@@ -94,14 +95,12 @@ function UploadAvatar({ error, file, helperText, sx, ...other }) {
             sx={{
               ...(file && {
                 opacity: 0,
-                color: "common.white",
+                color: common.white,
                 bgcolor: "grey.900",
-                "&:hover": {
-                  opacity: 0.72,
-                },
-                ...((isDragReject || error) && {
-                  bgcolor: "error.lighter",
-                }),
+                "&:hover": { opacity: 0.72 },
+              }),
+              ...((isDragReject || error) && {
+                bgcolor: "error.lighter",
               }),
             }}
           >

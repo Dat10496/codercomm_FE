@@ -29,15 +29,17 @@ function UserCard({ profile }) {
         >
           {name}
         </Link>
+
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <EmailRoundedIcon
+            sx={{ height: 16, width: 16, mr: 0.5, flexShrink: 0 }}
+          />
+          <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
+            {email}
+          </Typography>
+        </Box>
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <EmailRoundedIcon
-          sx={{ height: 16, width: 16, mr: 0.5, flexShrink: 0 }}
-        />
-        <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-          {email}
-        </Typography>
-      </Box>
+
       {actionButton}
     </Card>
   );
