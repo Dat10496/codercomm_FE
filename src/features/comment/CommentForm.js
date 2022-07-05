@@ -14,6 +14,7 @@ function CommentForm({ postId }) {
     dispatch(createComment({ postId, content }));
     setContent("");
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack direction="row" alignItems="center">

@@ -1,10 +1,61 @@
-import { Avatar, Paper, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { fDate } from "../../utils/formatTime";
 import CommentReaction from "./CommentReaction";
+import { useDispatch } from "react-redux";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { deleteComment } from "./commentSlice";
 
 function CommentCard({ comment }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
+  const commentId = comment._id;
+  // console.log(comment );
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteComment = () => {
+    setAnchorEl(null);
+    dispatch(deleteComment({ commentId }));
+  };
+
+  const renderMenu = (
+    <Menu
+      id="menu-appbar"
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={open}
+      onClose={handleMenuClose}
+    >
+      <MenuItem sx={{ my: 1 }} onClick={handleDeleteComment}>
+        Delete Comment
+      </MenuItem>
+    </Menu>
+  );
   return (
     <Stack direction="row" spacing={2}>
       <Avatar alt={comment.author?.name} src={comment.author?.avatarUrl} />
@@ -28,6 +79,10 @@ function CommentCard({ comment }) {
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <CommentReaction comment={comment} />
+          <IconButton onClick={handleProfileMenuOpen}>
+            <MoreVertIcon sx={{ frontSize: 30 }} />
+          </IconButton>
+          {renderMenu}
         </Box>
       </Paper>
     </Stack>

@@ -8,20 +8,38 @@ import LoadingScreen from "../../components/LoadingScreen";
 
 function CommentList({ postId }) {
   const dispatch = useDispatch();
-  const { commentByPost, commentsById, totalComments, isLoading, currentPage } =
-    useSelector(
-      (state) => ({
-        commentByPost: state.comment.commentsByPost[postId],
-        totalComments: state.comment.totalCommentsByPost[postId],
-        currentPage: state.comment.currentPageByPost[postId] || 1,
-        commentsById: state.comment.commentsById,
-        isLoading: state.comment.isLoading,
-      }),
-      shallowEqual
-    );
+  const {
+    commentByPost,
+    commentsById,
+    totalComments,
+    isLoading,
+    currentPage,
+    deleteCommentByPost,
+  } = useSelector(
+    (state) => ({
+      commentByPost: state.comment.commentsByPost[postId],
+      totalComments: state.comment.totalCommentsByPost[postId],
+      currentPage: state.comment.currentPageByPost[postId] || 1,
+      commentsById: state.comment.commentsById,
+      isLoading: state.comment.isLoading,
+      deleteCommentByPost: state.comment.deleteCommentByPost,
+    }),
+    shallowEqual
+  );
   const totalPages = Math.ceil(totalComments / COMMENT_PER_POST);
 
+  console.log(postId);
   let renderComments;
+  // if (deleteCommentByPost) {
+  //   for (let i = 0; i <= commentByPost.length; i++) {
+  //     if (commentByPost[i] === deleteCommentByPost) {
+  //       commentByPost.splice(i, 1);
+  //     }
+  //   }
+  // }
+  if (deleteCommentByPost) {
+    delete commentsById.deleteCommentByPost;
+  }
 
   if (commentByPost) {
     const comments = commentByPost.map((commentId) => commentsById[commentId]);

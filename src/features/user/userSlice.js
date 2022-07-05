@@ -30,7 +30,6 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.updatedProfile = action.payload;
-      // console.log(action.payload);
     },
   },
 });

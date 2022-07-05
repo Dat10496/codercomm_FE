@@ -51,6 +51,16 @@ const slice = createSlice({
       state.postsById = {};
       state.currentPagePosts = [];
     },
+    deletePostSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const postId = action.payload._id;
+      for (let i = 0; i <= state.currentPagePosts.length; i++) {
+        if (state.currentPagePosts[i] === postId) {
+          state.currentPagePosts.splice(i, 1);
+        }
+      }
+    },
   },
 });
 
@@ -104,6 +114,35 @@ export const sendPostReaction =
       );
     } catch (error) {
       dispatch(slice.actions.hasError());
+    }
+  };
+
+export const deletePost =
+  ({ postId }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await apiService.delete(`posts/${postId}`);
+      dispatch(slice.actions.deletePostSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+    }
+  };
+
+export const editPost =
+  ({ postId, content, image }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const imageUrl = await cloudinaryUpload(image);
+      const response = await apiService.put(`.posts/${postId}`, {
+        content,
+        image: imageUrl,
+      });
+      // dispatch(slice.actions.createPostSuccess(response.data.data));
+      console.log(response.data);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
     }
   };
 
