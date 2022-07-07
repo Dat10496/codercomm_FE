@@ -52,8 +52,7 @@ const slice = createSlice({
       state.error = null;
       const commentId = action.payload._id;
       const postId = action.payload.post;
-      state.deleteCommentByPost = commentId;
-      console.log(action.payload);
+      state.deleteCommentByPost[postId] = commentId;
     },
   },
 });

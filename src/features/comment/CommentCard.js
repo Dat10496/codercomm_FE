@@ -14,13 +14,15 @@ import CommentReaction from "./CommentReaction";
 import { useDispatch } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteComment } from "./commentSlice";
+import useAuth from "../../hooks/useAuth";
 
 function CommentCard({ comment }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
   const commentId = comment._id;
-  // console.log(comment );
+  const { user } = useAuth();
+  const userComment = comment.author._id === user._id;
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -79,9 +81,11 @@ function CommentCard({ comment }) {
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <CommentReaction comment={comment} />
-          <IconButton onClick={handleProfileMenuOpen}>
-            <MoreVertIcon sx={{ frontSize: 30 }} />
-          </IconButton>
+          {userComment && (
+            <IconButton onClick={handleProfileMenuOpen}>
+              <MoreVertIcon sx={{ frontSize: 30 }} />
+            </IconButton>
+          )}
           {renderMenu}
         </Box>
       </Paper>

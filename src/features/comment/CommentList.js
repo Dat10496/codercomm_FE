@@ -22,27 +22,19 @@ function CommentList({ postId }) {
       currentPage: state.comment.currentPageByPost[postId] || 1,
       commentsById: state.comment.commentsById,
       isLoading: state.comment.isLoading,
-      deleteCommentByPost: state.comment.deleteCommentByPost,
+      deleteCommentByPost: state.comment.deleteCommentByPost[postId],
     }),
     shallowEqual
   );
   const totalPages = Math.ceil(totalComments / COMMENT_PER_POST);
 
-  console.log(postId);
   let renderComments;
-  // if (deleteCommentByPost) {
-  //   for (let i = 0; i <= commentByPost.length; i++) {
-  //     if (commentByPost[i] === deleteCommentByPost) {
-  //       commentByPost.splice(i, 1);
-  //     }
-  //   }
-  // }
-  if (deleteCommentByPost) {
-    delete commentsById.deleteCommentByPost;
-  }
 
   if (commentByPost) {
     const comments = commentByPost.map((commentId) => commentsById[commentId]);
+    if (deleteCommentByPost) {
+      delete commentsById.deleteCommentByPost;
+    }
 
     renderComments = (
       <Stack spacing={1.5}>
@@ -57,7 +49,7 @@ function CommentList({ postId }) {
 
   useEffect(() => {
     if (postId) dispatch(getComments({ postId }));
-  }, [postId, dispatch]);
+  }, [postId, dispatch, deleteCommentByPost]);
 
   return (
     <Stack spacing={1.5}>

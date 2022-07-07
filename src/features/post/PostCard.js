@@ -6,10 +6,11 @@ import {
   Link,
   Menu,
   MenuItem,
+  Popover,
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { fDate } from "../../utils/formatTime";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -18,14 +19,22 @@ import PostReaction from "./PostReaction";
 import CommentList from "../comment/CommentList";
 import CommentForm from "../comment/CommentForm";
 import { useDispatch } from "react-redux";
-import { deletePost, editPost } from "./postSlice";
+import { deletePost } from "./postSlice";
+import useAuth from "../../hooks/useAuth";
+import PostFormEdit from "./PostFormEdit";
 
 function PostCard({ post }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isEditing, setIsEditing] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
+  const { user } = useAuth();
+
+  const content = post.content;
+  const image = post.image;
+
   const postId = post._id;
-  const userId = post.author._id;
+  const userPost = post.author._id === user._id;
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -37,12 +46,16 @@ function PostCard({ post }) {
 
   const handleDeletePost = () => {
     setAnchorEl(null);
-    dispatch(deletePost({ postId, userId }));
+    dispatch(deletePost({ postId }));
   };
 
-  const handleEditPost = () => {
+  const handleEditPost = (e) => {
     setAnchorEl(null);
-    dispatch(editPost({ postId }));
+    setIsEditing(e.currentTarget);
+  };
+
+  const handleFormEditClose = () => {
+    setIsEditing(null);
   };
 
   const renderMenu = (
@@ -70,8 +83,26 @@ function PostCard({ post }) {
     </Menu>
   );
 
+  useEffect(() => {}, [content, image]);
+
   return (
     <Card>
+      <Popover
+        id={post._id}
+        open={Boolean(isEditing)}
+        anchorEl={isEditing}
+        onClose={handleFormEditClose}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+      >
+        <PostFormEdit post={post} />
+      </Popover>
       <CardHeader
         disableTypography
         avatar={
@@ -92,20 +123,22 @@ function PostCard({ post }) {
             variant="caption"
             sx={{ display: "block", color: "text.secondary" }}
           >
-            {fDate(post?.author?.createdAt)}
+            {fDate(post?.createdAt)}
           </Typography>
         }
         action={
-          <IconButton onClick={handleProfileMenuOpen}>
-            <MoreVertIcon sx={{ frontSize: 30 }} />
-          </IconButton>
+          userPost && (
+            <IconButton onClick={handleProfileMenuOpen}>
+              <MoreVertIcon sx={{ frontSize: 30 }} />
+            </IconButton>
+          )
         }
       />
       {renderMenu}
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Typography>{post.content}</Typography>
-        {post.image && (
+        <Typography>{content}</Typography>
+        {image && (
           <Box
             sx={{
               borderRadius: 2,
@@ -114,7 +147,7 @@ function PostCard({ post }) {
               "& img": { objectFit: "cover", width: 1, height: 1 },
             }}
           >
-            <img src={post.image} alt={post.content} />
+            <img src={image} alt={content} />
           </Box>
         )}
 

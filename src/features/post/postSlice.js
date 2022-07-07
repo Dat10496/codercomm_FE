@@ -25,6 +25,7 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const newPost = action.payload;
+      console.log(action.payload);
       if (state.currentPagePosts.length % POST_PER_PAGE === 0)
         state.currentPagePosts.pop();
       state.postsById[newPost._id] = newPost;
@@ -60,6 +61,17 @@ const slice = createSlice({
           state.currentPagePosts.splice(i, 1);
         }
       }
+    },
+    editPostSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      console.log(action.payload);
+      const contentEdit = action.payload.content;
+      const imageEdit = action.payload.image;
+      const postId = action.payload._id;
+
+      state.postsById._id.content = contentEdit;
+      state.postsById._id.image = imageEdit;
     },
   },
 });
@@ -134,13 +146,16 @@ export const editPost =
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
+      if (image === "string") {
+        return "";
+      }
+
       const imageUrl = await cloudinaryUpload(image);
-      const response = await apiService.put(`.posts/${postId}`, {
-        content,
-        image: imageUrl,
-      });
+
+      const data = { content, image: imageUrl };
+      const response = await apiService.put(`/posts/${postId}`, data);
+      dispatch(slice.actions.editPostSuccess(response.data.data));
       // dispatch(slice.actions.createPostSuccess(response.data.data));
-      console.log(response.data);
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
     }
