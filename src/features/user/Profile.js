@@ -4,7 +4,6 @@ import useAuth from "../../hooks/useAuth";
 import PostForm from "../post/PostForm";
 import PostList from "../post/PostList";
 import ProfileAbout from "./ProfileAbout";
-import ProfileCover from "./ProfileCover";
 import ProfileScorecard from "./ProfileScorecard";
 import ProfileSocialInfo from "./ProfileSocialInfo";
 

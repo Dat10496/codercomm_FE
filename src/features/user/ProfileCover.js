@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import useAuth from "../../hooks/useAuth";
 import FriendStatus from "../friend/FriendStatus";
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 const RootStyle = styled("div")(({ theme }) => ({
   "&:before": {

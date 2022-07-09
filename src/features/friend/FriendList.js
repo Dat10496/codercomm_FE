@@ -1,12 +1,5 @@
-import {
-  Card,
-  Grid,
-  Pagination,
-  Stack,
-  TablePagination,
-  Typography,
-} from "@mui/material";
-import { Box, Container } from "@mui/system";
+import { Card, Grid, Pagination, Stack, Typography } from "@mui/material";
+import { Container } from "@mui/system";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchInput from "../../components/SearchInput";

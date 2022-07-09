@@ -46,14 +46,10 @@ function UserTable({ users }) {
               <TableCell sx={{ width: { sx: "none%", sm: "table-cell" } }}>
                 Job Title
               </TableCell>
-              <TableCell
-                sx={{ width: { sx: "none%", sm: "table-cell" }, width: "20%" }}
-              >
+              <TableCell sx={{ width: { sx: "none%", sm: "table-cell" } }}>
                 Status
               </TableCell>
-              <TableCell
-                sx={{ width: { sx: "none%", sm: "table-cell" }, width: "20%" }}
-              >
+              <TableCell sx={{ width: { sx: "none%", sm: "table-cell" } }}>
                 Action
               </TableCell>
             </TableRow>

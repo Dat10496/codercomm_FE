@@ -1,11 +1,9 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Card, alpha, Box, Stack } from "@mui/material";
 import { FormProvider, FTextField, FUploadImage } from "../../components/form";
 import { LoadingButton } from "@mui/lab";
-import { createPost, editPost } from "./postSlice";
+import { editPost } from "./postSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function PostFormEdit({ handleFormEditClose, post }) {
