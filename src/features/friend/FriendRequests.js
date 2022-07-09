@@ -1,63 +1,51 @@
-import { Card, Grid, Pagination, Stack, Typography } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import SearchInput from "../../components/SearchInput";
-import { getFriendRequest } from "./friendSlice";
-import UserCard from "./UserCard";
+import React, { useState } from "react";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import FriendRequestTab from "./FriendRequestTab";
+import RequestFriendTab from "./RequestFriendTab";
+import { capitalCase } from "change-case";
 
 function FriendRequests() {
-  const dispatch = useDispatch();
-  const [filterName, setFilterName] = useState("");
-  const [page, setPage] = useState(1);
-
-  const { currentPageUsers, usersById, totalPages, totalUsers } = useSelector(
-    (state) => state.friend
-  );
-  const users = currentPageUsers.map((userId) => usersById[userId]);
-
-  useEffect(() => {
-    dispatch(getFriendRequest({ page, filterName }));
-  }, [page, dispatch, filterName]);
-
-  const handleSubmit = (searchQuery) => {
-    setFilterName(searchQuery);
-  };
+  const [currentTab, setCurrentTab] = useState("friend_request");
+  const CURRENT_TAB = [
+    {
+      value: "friend_request",
+      icon: <PersonAddIcon sx={{ frontSize: 24 }} />,
+      component: <FriendRequestTab />,
+    },
+    {
+      value: "requested_friend",
+      icon: <PeopleAltIcon sx={{ frontSize: 24 }} />,
+      component: <RequestFriendTab />,
+    },
+  ];
 
   return (
     <Container>
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        Friend Requests
-      </Typography>
-      <Card sx={{ p: 3 }}>
-        <Stack spacing={2}>
-          <Stack direction={{ sx: "column", md: "row" }} alignItems="center">
-            <SearchInput handleSubmit={handleSubmit} />
-            <Typography
-              variant="subtitle"
-              sx={{ color: "text.secondary", ml: 1 }}
-            >
-              {totalUsers > 1
-                ? `${totalUsers} Friend Requests found`
-                : totalUsers === 1
-                ? `${totalUsers} Friend Request found`
-                : "No Friend Request found"}
-            </Typography>
-          </Stack>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(e, page) => setPage(page)}
+      <Tabs
+        value={currentTab}
+        scrollButtons="auto"
+        variant="scrollable"
+        allowScrollButtonsMobile
+        onChange={(e, value) => setCurrentTab(value)}
+      >
+        {CURRENT_TAB.map((tab) => (
+          <Tab
+            disableRipple
+            key={tab.value}
+            label={capitalCase(tab.value)}
+            icon={tab.icon}
+            value={tab.value}
           />
-        </Stack>
-        <Grid container spacing={3} my={1}>
-          {users.map((user) => (
-            <Grid key={user._id} item xs={12} md={4}>
-              <UserCard profile={user} />
-            </Grid>
-          ))}
-        </Grid>
-      </Card>
+        ))}
+      </Tabs>
+      <Box mb={5} />
+      {CURRENT_TAB.map((tab) => {
+        const isMatched = tab.value === currentTab;
+        return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+      })}
     </Container>
   );
 }

@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Card,
   CardHeader,
   IconButton,
@@ -26,6 +27,7 @@ import PostFormEdit from "./PostFormEdit";
 function PostCard({ post }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isEditing, setIsEditing] = useState(null);
+  const [isConfirm, setIsConfirm] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
   const { user } = useAuth();
@@ -36,6 +38,10 @@ function PostCard({ post }) {
   const postId = post._id;
   const userPost = post.author._id === user._id;
 
+  const handleConfirmClose = () => {
+    setIsConfirm(null);
+  };
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -44,9 +50,9 @@ function PostCard({ post }) {
     setAnchorEl(null);
   };
 
-  const handleDeletePost = () => {
+  const handleDeletePost = (e) => {
+    setIsConfirm(e.currentTarget);
     setAnchorEl(null);
-    dispatch(deletePost({ postId }));
   };
 
   const handleEditPost = (e) => {
@@ -57,6 +63,62 @@ function PostCard({ post }) {
   const handleFormEditClose = () => {
     setIsEditing(null);
   };
+
+  const handleConfirmDelete = (e) => {
+    if (e === "YES") {
+      dispatch(deletePost({ postId }));
+    } else if (e === "CANCEL") {
+      setIsConfirm(null);
+      return;
+    }
+  };
+
+  const renderConfirmDelete = (
+    <Popover
+      id={post._id}
+      open={Boolean(isConfirm)}
+      anchorEl={isConfirm}
+      onClose={handleConfirmClose}
+      anchorOrigin={{
+        vertical: "center",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "center",
+        horizontal: "right",
+      }}
+      sx={{
+        borderRadius: 8,
+      }}
+    >
+      <Card
+        sx={{
+          width: 300,
+          height: 100,
+          p: 1,
+          alignContent: "center",
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#f5f3f0",
+          borderRadius: 0,
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          mt={1}
+          justifyContent="center"
+          display="flex"
+        >
+          Are you sure to delete this post?
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", p: 1 }}>
+          <Button onClick={() => handleConfirmDelete("YES")}>Yes</Button>
+          <Button onClick={() => handleConfirmDelete("CANCEL")}>Cancel</Button>
+        </Box>
+      </Card>
+    </Popover>
+  );
 
   const renderMenu = (
     <Menu
@@ -77,13 +139,12 @@ function PostCard({ post }) {
       <MenuItem sx={{ my: 1 }} onClick={handleDeletePost}>
         Delete Post
       </MenuItem>
+      {renderConfirmDelete}
       <MenuItem sx={{ my: 1 }} onClick={handleEditPost}>
         Edit Post
       </MenuItem>
     </Menu>
   );
-
-  useEffect(() => {}, [content, image]);
 
   return (
     <Card>
@@ -101,7 +162,7 @@ function PostCard({ post }) {
           horizontal: "right",
         }}
       >
-        <PostFormEdit post={post} />
+        <PostFormEdit handleFormEditClose={handleFormEditClose} post={post} />
       </Popover>
       <CardHeader
         disableTypography

@@ -34,7 +34,6 @@ function MainHeader() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    console.log("hihi");
   };
 
   const renderMenu = (

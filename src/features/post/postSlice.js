@@ -2,6 +2,7 @@ import apiService from "../../app/apiService";
 import { createSlice } from "@reduxjs/toolkit";
 import { POST_PER_PAGE } from "../../app/config";
 import { cloudinaryUpload } from "../../utils/cloudinary";
+import { toast } from "react-toastify";
 
 const initialState = {
   isLoading: false,
@@ -25,7 +26,7 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const newPost = action.payload;
-      console.log(action.payload);
+
       if (state.currentPagePosts.length % POST_PER_PAGE === 0)
         state.currentPagePosts.pop();
       state.postsById[newPost._id] = newPost;
@@ -65,13 +66,11 @@ const slice = createSlice({
     editPostSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      console.log(action.payload);
-      const contentEdit = action.payload.content;
-      const imageEdit = action.payload.image;
-      const postId = action.payload._id;
-
-      state.postsById._id.content = contentEdit;
-      state.postsById._id.image = imageEdit;
+      const editPost = action.payload;
+      const editContent = action.payload.content;
+      const editImage = action.payload.image;
+      state.postsById[editPost._id].content = editContent;
+      state.postsById[editPost._id].image = editImage;
     },
   },
 });
@@ -136,6 +135,7 @@ export const deletePost =
     try {
       const response = await apiService.delete(`posts/${postId}`);
       dispatch(slice.actions.deletePostSuccess(response.data.data));
+      toast.success("Delete Post Success");
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
     }
@@ -149,13 +149,11 @@ export const editPost =
       if (image === "string") {
         return "";
       }
-
       const imageUrl = await cloudinaryUpload(image);
-
       const data = { content, image: imageUrl };
       const response = await apiService.put(`/posts/${postId}`, data);
       dispatch(slice.actions.editPostSuccess(response.data.data));
-      // dispatch(slice.actions.createPostSuccess(response.data.data));
+      toast.success("Edit Post Success");
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
     }

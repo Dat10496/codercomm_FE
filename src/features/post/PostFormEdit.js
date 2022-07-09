@@ -8,15 +8,14 @@ import { LoadingButton } from "@mui/lab";
 import { createPost, editPost } from "./postSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-function PostFormEdit({ post }) {
+function PostFormEdit({ handleFormEditClose, post }) {
   const defaultValues = {
     content: post?.content || "",
     image: post?.image || "",
-    postId: post._id,
+    postId: post?._id,
   };
 
   const dispatch = useDispatch();
-  const postId = post._id;
 
   const methods = useForm({
     defaultValues,
@@ -90,6 +89,7 @@ function PostFormEdit({ post }) {
               variant="contained"
               size="small"
               loading={isSubmitting || isLoading}
+              onClick={handleFormEditClose}
             >
               Save
             </LoadingButton>
